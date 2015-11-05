@@ -1,0 +1,41 @@
+
+/*Mastermind
+
+"Mastermind" is a game where a codemaker has a secret sequence of four digits, and a codebreaker must guess the correct composition and order of those digits.
+
+After every guess, the codemaker provides feedback: every digit that is in the correct position gets a red mark, and every digit that exists in the answer, but is not in the correct position, gets a white mark.
+
+Write a program that lets the user play Mastermind. It should pick a four-digit number, and let the user make any number of guesses, providing appropriate feedback.
+
+> mastermind
+Guess a number: 1234
+1 red, 2 white
+Guess a number: 1567
+1 red, 1 white
+Guess a number: 2314
+3 white
+Guess a number: 1642
+3 red
+Guess a number: 1742
+4 red
+You win!  It took you 5 guesses.
+
+> mastermind
+Guess a number: 1122
+1 red, 1 white
+Guess a number: 1234
+1 red, 1 white
+Guess a number: 1351
+No matches
+Guess a number: 7282
+2 red, 1 white
+Guess a number: 4272
+2 red, 1 white
+Guess a number: 8242
+4 red
+You win!  It took you 6 guesses.
+
+Having trouble? It may be easier to implement if the computer-picked number has four unique digits, instead of repeated digits, and then assume that the user will only type in unique digits, as well. Please add a comment to this effect if you take this approach.
+
+Challenge: Add an option for the game to play itself. Done efficiently, this autoplay function should always win within 7 guesses.
+*/
