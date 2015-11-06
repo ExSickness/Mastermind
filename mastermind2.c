@@ -1,3 +1,4 @@
+#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -12,14 +13,12 @@ int compare(int red, int white,int target[], char guess[]);
 
 int main(void)
 {
+	srand(time(NULL));
 	//compGame();
 
 	game();
 
-	return(0);
 }
-
-
 
 int compGame()
 {
@@ -33,7 +32,7 @@ int compGame()
 	int fourPlace[10]  = {0,1,2,3,4,5,6,7,8,9};
 
 	printf("Target is: ");
-	srand(time(NULL));
+	
 	for (int i = 0; i < 4; i++)
 	{
 		target[i] = rand() % 10;
@@ -54,40 +53,10 @@ int compGame()
 
 
 void compInput(char* guess,int red, int white, int* count,int* onePlace,int* twoPlace,int* threePlace,int* fourPlace)
-{/*
-	if (count ==0)
-	{
-		guess[0] = 1;
-		guess[1] = 1;
-		guess[2] = 2;
-		guess[3] = 2;
-		printf("Guessing 1122\n");
-		exit(0);
-	}
-	else
-	{
-		red = 4;
-
-
-
-
-
-
-
-
-	}
-*/
+{
 	printf("%c %d %d %p %d %d %d %d",guess[0],red, white, (void*)count, onePlace[0], twoPlace[0], threePlace[0], fourPlace[0]);
 	return;
 }
-
-
-
-
-
-
-
-
 
 int game()
 {
@@ -96,13 +65,23 @@ int game()
 	int red = 0, count =0,white=0;
 
 	printf("Target is: ");
-	srand(time(NULL));
 	for (int i = 0; i < 4; i++)
 	{
 		target[i] = rand() % 10;
-		printf("%d",target[i]);
+		//printf("%d",target[i]);
 	}
 	printf("\n");
+
+	target[0] = 1;
+	target[1] = 3;
+	target[2] = 3;
+	target[3] = 3;
+
+	printf("%d",target[0]);
+	printf("%d",target[1]);
+	printf("%d",target[2]);
+	printf("%d\n",target[3]);
+
 
 	while(red != 4)
 	{
@@ -122,7 +101,7 @@ int compare(int red, int white,int target[], char guess[])
 	int skip[4] = {0};
 	int whiteSkip[4] = {0};
 
-	
+
 
 	// Red Loop, sets indexes to skip
 	for(int i = 0; i < 4;i++)
@@ -140,28 +119,32 @@ int compare(int red, int white,int target[], char guess[])
 	printf("%d\n",skip[3]);
 	for(int p = 0; p <4; p++)
 	{
+		//printf("\n\np is: %d\n",p);
 		if(skip[p])
 		{
-			whiteSkip[p] = 1;
+			//whiteSkip[p] = 1;
 			continue;
 		}
 
 		for(int x = 0;x<4; x++)
 		{
-			if((whiteSkip[x]) || (skip[p]))
+			if(whiteSkip[x])
 			{
 				continue;
 			}
 			else if(guess[p] == target[x])
 			{
+				//printf("White found\n");
 				white +=1;
 				whiteSkip[x] = 1;
+				skip[p] = 1;
 				break;
 			}
 		}
 	}
 
 	printf("%d red, %d white\n",red,white);
+
 	printf("=======================================\n");
 	return(red);
 }
@@ -169,26 +152,52 @@ int compare(int red, int white,int target[], char guess[])
 
 void userInput(char* user)
 {
-	printf("Guess a number: ");
-	fgets(user,MAX,stdin);
+	int valid = 0, check = 0;
+	char c;
 
-	for(int i = 0; i < 4; i++)
+	while(!valid)
 	{
-		user[i] = user[i] - 48;
+		check = 0;
+		printf("Guess a number: ");
+		fgets(user,MAX,stdin);
+		
+		if(user[4]!= '\n') // Checking for four characters.
+		{
+			printf("Please enter FOUR numbers.\n");
+			if(strlen(user) < 5)
+			{
+				continue;
+			}
+			else
+			{
+				while ( (c=getchar()) != '\n' && c != EOF ) // Loop to clear out the stdin buffer.
+    				/*Do nothing*/;
+    			continue;
+    		}
+		}
+		else // Entered four characters plus a \n.
+		{
+			for(int i = 0; i < 4; i++) // iterate through those four characters
+			{
+				if( (user[i] > '9') || (user[i] < '0') ) // Check for non number character
+				{
+					check = 1;
+					break;
+				}
+			}
+			if(check) //Non number character entered.
+			{
+				printf("letter encountered.\n");
+				while ( (c=getchar()) != '\n' && c != EOF ) // Loop to clear out the stdin buffer.
+		    		/*Do nothing*/;
+				continue;
+			}
+			valid = 1; // Validation complete with only 4 numbers.
+			for(int i = 0;i < 4; i++)
+			{
+				user[i] = user[i] - '0';
+			}
+		}
+		
 	}
 }
-
-
-
-
-/*
-	target[0] = 7;
-	target[1] = 3;
-	target[2] = 4;
-	target[3] = 3;
-
-	printf("%d",target[0]);
-	printf("%d",target[1]);
-	printf("%d",target[2]);
-	printf("%d\n",target[3]);
-*/
