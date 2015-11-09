@@ -1,7 +1,8 @@
-#include <string.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define MAX 6
 #define FOUR 4
@@ -9,13 +10,59 @@
 void userInput(char* input);
 int game();
 int compare(int red, int white,int target[], char guess[]);
+size_t strnlen(const char *str, size_t maxlen);
+
 
 int main(void)
 {
 	srand(time(NULL));
 
-	game();
-	//compGame();
+	printf("\nHello user, I would like to play a game. (Mastermind)\nWould you like to play?\n");
+	int loop = 1;
+	char choice;
+	char input[3];
+	while(loop)
+	{
+		printf(" [Y]es\n [N]o\nMake your choice: ");
+		fgets(input,MAX,stdin);
+		choice = input[0];
+		switch(choice)
+		{
+			case 'y':
+			case 'Y':
+			{
+				printf("=======================================\n");
+				printf("Let the game begin...\n");
+				game();
+				break;
+			}
+			case 'n':
+			case 'N':
+			{
+				loop = 0;
+				break;
+			}
+			default:
+			{
+				printf("Please enter a Y or an N.\n");
+				printf("=======================================\n");
+				if(input[1] != '\n')
+				{
+					while(!strchr(input, '\n'))
+					{
+						fgets(input, sizeof(input), stdin);
+					}
+					input[2] = '\0';
+				}
+				else
+				{
+					input[2] = '\0';
+				}
+				break;
+			}
+		}
+		//compGame();
+	}
 }
 
 
@@ -25,23 +72,11 @@ int game()
 	char guess[MAX];
 	int red = 0, count =0,white=0;
 
-	printf("Target is: ");
 	for (int i = 0; i < FOUR; i++)
 	{
 		target[i] = rand() % 10;
 	}
 	printf("\n");
-
-	target[0] = 1;
-	target[1] = 3;
-	target[2] = 3;
-	target[3] = 3;
-
-	printf("%d",target[0]);
-	printf("%d",target[1]);
-	printf("%d",target[2]);
-	printf("%d\n",target[3]);
-
 
 	while(red != FOUR)
 	{
@@ -50,6 +85,7 @@ int game()
 		count +=1;
 	}
 	printf("You've won in %d guesses.\n",count);
+	printf("Would you like to play again?\n");
 
 	return(0);
 }
@@ -73,24 +109,21 @@ int compare(int red, int white,int target[], char guess[])
 			whiteSkip[i] = 1;
 		}
 	}
-	printf("%d",skip[0]);
-	printf("%d",skip[1]);
-	printf("%d",skip[2]);
-	printf("%d\n",skip[3]);
+
 	for(int p = 0; p <FOUR; p++)
 	{
-		if(skip[p])
+		if(skip[p]) // Skipping those marked as red
 		{
 			continue;
 		}
 
 		for(int x = 0;x<FOUR; x++)
 		{
-			if(whiteSkip[x])
+			if(whiteSkip[x]) // Skiping those marked as white
 			{
 				continue;
 			}
-			else if(guess[p] == target[x])
+			else if(guess[p] == target[x]) // Finds whites
 			{
 				//White found
 				white +=1;
@@ -102,7 +135,6 @@ int compare(int red, int white,int target[], char guess[])
 	}
 
 	printf("%d red, %d white\n",red,white);
-
 	printf("=======================================\n");
 	return(red);
 }
@@ -153,7 +185,15 @@ void userInput(char* user)
 			{
 				user[i] = user[i] - '0';
 			}
-		}
-		
+		}	
 	}
+}
+
+
+size_t strnlen(const char *str, size_t maxlen)
+{
+     size_t i;
+     for(i = 0; i < maxlen && str[i]; i++)
+     	/*Do nothing.*/;
+     return i;
 }
